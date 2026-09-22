@@ -1,66 +1,18 @@
-# Patrones Invisibles: Información, Incertidumbre y Movilidad Urbana
+# Datos
 
-Proyecto Retador — ML No Supervisado, Universidad de La Sabana, 2026-II.
+Este proyecto usa **NYC Taxi Trip Duration** (Kaggle):
+https://www.kaggle.com/c/nyc-taxi-trip-duration/data
 
-Consultoría analítica simulada para **UrbanMove**: aplicamos teoría de la información, clustering por
-partición y modelos de mezcla gaussiana sobre 1,458,644 viajes de taxi en Nueva York para responder
-dónde y cuándo posicionar conductores, minimizando el tiempo de espera sin sobre-ofertar en zonas de
-baja demanda.
+El archivo `train.csv` no se incluye en el repositorio por su tamaño (~65 MB) y por la licencia de Kaggle.
 
-## Equipo
+## Para reproducir
 
-| Integrante | Código | Rol |
-|---|---|---|
-| Diego Alejandro Sandoval | 339271 | Rol 4 — Estratega de Negocio y Selección de Datos |
-| Daniel Figueredo | 332679 | Rol 1 — Analista de Incertidumbre e Información |
-| Juan Esteban Ocampo | 286388 | Rol 2 — Arquitecto de Segmentación por Partición |
-| Juan Andres Martinez | 326771 | Rol 3 — Modelador de Mezclas y Variables Latentes |
+1. Crear una cuenta gratuita en Kaggle si no tienes una.
+2. Descargar `nyc-taxi-trip-duration.zip` desde el enlace de arriba.
+3. Descomprimir y colocar `train.csv` en esta carpeta (`data/train.csv`).
+4. Correr los notebooks en orden, empezando por `00_limpieza_y_muestreo.ipynb`, que genera:
+   - `data/train_limpio.parquet` (población limpia, usada por el Rol 1)
+   - `data/muestra_features.parquet` (muestra de 50,004 viajes con variables derivadas, usada por los Roles 2 y 3)
+   - `data/poblacion_zonas.parquet` (población con el mismo grid de zonas, para validar el Rol 1)
 
-## Documento de soporte
-
-El PDF con los resultados completos, la justificación de la metodología y las recomendaciones
-cuantificadas está en [`docs/documento_soporte.pdf`](docs/documento_soporte.pdf).
-
-## Dataset
-
-[NYC Taxi Trip Duration (Kaggle)](https://www.kaggle.com/c/nyc-taxi-trip-duration/data) — no se
-incluye en el repositorio (ver [`data/README.md`](data/README.md) para reproducir).
-
-## Estructura
-
-```
-notebooks/
-├── 00_limpieza_y_muestreo.ipynb            Preparación de datos común a los 3 roles
-├── 01_rol1_teoria_informacion.ipynb        Rol 1 — entropía, KL, información mutua, log-sum-exp
-├── 02_rol2_clustering.ipynb                Rol 2 — K-means y DBSCAN
-├── 03_rol3_mezclas_gaussianas.ipynb        Rol 3 — GMM, EM implementado a mano
-└── 04_rol4_integracion_recomendaciones.ipynb  Rol 4 — integración y recomendaciones
-
-src/config.py       Constantes compartidas (semilla, proyección, tamaño de zona)
-docs/                Documento de soporte (PDF)
-bitacora_metodologica.md   Registro de cada decisión metodológica tomada durante el proyecto
-```
-
-## Cómo correrlo
-
-```bash
-pip install pandas numpy scipy scikit-learn pyarrow matplotlib
-```
-
-1. Descargar el dataset (ver `data/README.md`).
-2. Correr los notebooks en el orden numerado (00 → 04). Cada uno guarda los archivos `.parquet`
-   que el siguiente necesita.
-
-## Metodología (resumen)
-
-- **Limpieza:** se eliminan solo errores de medición físicamente imposibles (1.35% del dataset). Los
-  días atípicos reales (ventisca de enero, Memorial Day) se conservan deliberadamente.
-- **Muestreo:** estratificado proporcional por día×hora, 50,004 viajes, semilla 42 — verificado por
-  divergencia KL contra la población.
-- **Rol 1:** los agregados de teoría de la información se calculan sobre la población completa
-  (1,438,943 viajes) para evitar el sesgo de estimación detectado en la muestra.
-- **Rol 3:** el algoritmo EM se implementó también a mano (sin scikit-learn) y se verificó que
-  reproduce exactamente los mismos resultados, con criterio de convergencia estricto (1e-9).
-
-El detalle completo de cada decisión — con sus alternativas consideradas y su justificación — está en
-[`bitacora_metodologica.md`](bitacora_metodologica.md).
+Estos `.parquet` tampoco se versionan (ver `.gitignore`); cada notebook los regenera o los consume desde el paso anterior.
