@@ -2,7 +2,6 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![NYC TTTP Repository](https://img.shields.io/badge/Dataset-NYC%20Taxi%20Trip%20Duration-orange.svg)](https://www.kaggle.com/c/nyc-taxi-trip-duration/data)
 [![Video Pitch](https://img.shields.io/badge/Video-red?logo=youtube)](https://drive.google.com/file/d/1b5VjArZeJO_kLYWNZFTObZIiar470sT8/view?usp=sharing)
-[![GitHub Repository](https://img.shields.io/badge/GitHub-patrones-invisibles-urbanmove-blue?logo=github)](https://github.com/diex360/patrones-invisibles-urbanmove))
 
 # Patrones Invisibles: Información, Incertidumbre y Movilidad Urbana
 
